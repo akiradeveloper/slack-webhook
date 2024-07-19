@@ -1,0 +1,13 @@
+[package]
+name = "slack-webhook"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+reqwest = { version = "0.12.5", features = ["json"] }
+serde_json = "1.0.120"
+thiserror = "1.0.63"
+
+[dev-dependencies]
+anyhow = "*"
+tokio = { version = "*", features = ["full"] }
