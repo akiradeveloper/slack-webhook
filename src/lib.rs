@@ -24,7 +24,10 @@ impl SlackWebhook {
 
     /// Make a fake client that actually does nothing.
     pub fn fake() -> Self {
-        Self { url: None, prefix: None }
+        Self {
+            url: None,
+            prefix: None,
+        }
     }
 
     /// Add prefix to every message.
@@ -38,13 +41,22 @@ impl SlackWebhook {
     pub async fn send_text(&self, text: impl Into<String>) -> Result<serde_json::Value, Error> {
         let client = Client::new();
         let message = {
-            let prefix = self.prefix.as_ref().map(|x| format!("{} ", x)).unwrap_or_default();
+            let prefix = self
+                .prefix
+                .as_ref()
+                .map(|x| format!("{} ", x))
+                .unwrap_or_default();
             json!({
                 "text": format!("{prefix}{}", text.into()),
             })
         };
         if let Some(url) = &self.url {
-            let resp = client.post(url.clone()).json(&message).send().await.map_err(|e| Error::SendError(e))?;
+            let resp = client
+                .post(url.clone())
+                .json(&message)
+                .send()
+                .await
+                .map_err(|e| Error::SendError(e))?;
             resp.error_for_status().map_err(|e| Error::SendError(e))?;
             Ok(message)
         } else {

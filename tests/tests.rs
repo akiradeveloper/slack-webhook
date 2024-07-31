@@ -1,5 +1,5 @@
-use slack_webhook::*;
 use anyhow::Result;
+use slack_webhook::*;
 
 #[tokio::test]
 async fn test_fake_send_ok() -> Result<()> {
@@ -27,7 +27,8 @@ fn test_url_error() {
 
 #[tokio::test]
 async fn test_send_error() -> Result<()> {
-    let non_existing_url = "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX";
+    let non_existing_url =
+        "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX";
     let slack = SlackWebhook::new(non_existing_url)?;
     let resp = slack.send_text("fuck you").await;
     assert!(resp.is_err());
